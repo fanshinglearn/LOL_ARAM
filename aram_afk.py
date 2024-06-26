@@ -14,15 +14,22 @@ stop_flag = threading.Event()
 def afk():
     while not stop_flag.is_set():
         is_in_game, game_type, team = opgg_is_in_game()
+
+        wait_for_crawler()
+
         if is_in_game:
-            msg = f'正在進行 {game_type} 對戰 owo\n你是{team}'
+            msg = f'遊戲模式: {game_type}\n隊伍: {team}'
+            L1.config(text=msg)
             if team == '藍隊':
-                LOL.attack(aram_jdata['pos']['red_castle'])
+                enemy_caastle_pos = aram_jdata['pos']['red_castle']
             else:
-                LOL.attack(aram_jdata['pos']['blue_castle'])
+                enemy_caastle_pos = aram_jdata['pos']['blue_castle']
+            LOL.click(enemy_caastle_pos)
+            LOL.attack(enemy_caastle_pos)
         else:
             msg = '沒有在進行對戰 .w.'
-        L1.config(text=msg)
+            L1.config(text=msg)
+
         countdown(30)
 
 def opgg_is_in_game():
@@ -46,6 +53,13 @@ def opgg_is_in_game():
         team = None
     return is_in_game, game_type, team
 
+def wait_for_crawler():
+    msg = '查詢中'
+    for _ in range(3):
+        msg += '.'
+        L1.config(text=msg)
+        time.sleep(0.5)
+
 def countdown(seconds):
     for i in range(seconds, -1, -1):
         if stop_flag.is_set():
@@ -65,7 +79,7 @@ def start_afk():
 def stop_afk():
     stop_flag.set()
     start_btn.config(state=tk.NORMAL)
-    L1.config(text='結束 .w.')
+    L1.config(text='暫停 .w.')
 
 root = tk.Tk()
 root.geometry("200x200+800+300")
@@ -75,19 +89,31 @@ root.title('ARAM 掛機')
 # 設置視窗置頂
 root.attributes("-topmost", True)
 
-# 開始按鈕
-start_btn = tk.Button(root, text='開始', command=start_afk)
-start_btn.pack(padx=10, pady=10)
+# root.wm_attributes("-transparentcolor", "aqua")
+# root.configure(bg='aqua')
 
-# 結束按鈕
-stop_btn = tk.Button(root, text='結束', command=stop_afk)
-stop_btn.pack(padx=10, pady=10)
+
+# < ------------------------------ 上半 ------------------------------ >
+F1=tk.LabelFrame(root)
+F1.pack(padx=10, pady=10)
+
+# 開始按鈕
+start_btn = tk.Button(F1, text='開始', command=start_afk)
+start_btn.pack(side='left', padx=10, pady=10)
+
+# 暫停按鈕
+stop_btn = tk.Button(F1, text='暫停', command=stop_afk)
+stop_btn.pack(side='left', padx=10, pady=10)
+
+# < ------------------------------ 下半 ------------------------------ >
+F2=tk.LabelFrame(root)
+F2.pack(padx=10, pady=10)
 
 # 顯示狀態的Label
-L1 = tk.Label(root, text='')
+L1 = tk.Label(F2, text='L1')
 L1.pack(padx=10, pady=10)
 
-L2 = tk.Label(root, text='')
+L2 = tk.Label(F2, text='L2')
 L2.pack(padx=10, pady=10)
 
 root.mainloop()
