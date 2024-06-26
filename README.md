@@ -18,15 +18,15 @@ LOL_ARAM 隨機單中小助手
 
 ### aram_afk.py
 
-![tkinter畫面](images/aram_afk_main.png.png)
+![tkinter畫面](images/aram_afk_main.png)
 
 按下開始後會爬取 [opgg](https://lol-web-api.op.gg/api/v1.0/internal/bypass/spectates/tw/1nXTkNy9PF9RGpU4P_kFz-49_aze2BUmOXCtJDPOuPsw3_IZY9cRPA2Hlg) 上我的 LOL 帳號查看是否正在進行對戰
 
-![tkinter畫面](images/aram_afk_1.pngpng)
+![tkinter畫面](images/aram_afk_1.png)
 
 按下暫停可暫停程式
 
-![tkinter畫面](images/aram_afk_2.pngpng)
+![tkinter畫面](images/aram_afk_2.png)
 
 ## 待改進問題
 
